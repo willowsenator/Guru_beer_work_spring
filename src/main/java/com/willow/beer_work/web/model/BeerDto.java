@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class BeerDto {
     private UUID id;
-    private String name;
-    private String style;
+    private String beerName;
+    private String beerStyle;
     private String upc;
 }
