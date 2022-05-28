@@ -14,8 +14,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
-    private BeerService beerService;
-
+    private final BeerService beerService;
 
     public BeerController(BeerService beerService) {
         this.beerService = beerService;
