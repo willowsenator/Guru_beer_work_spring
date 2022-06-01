@@ -11,4 +11,9 @@ public class BeerServiceImpl implements BeerService {
     public BeerDto getBeerById(UUID beerId) {
         return BeerDto.builder().id(UUID.randomUUID()).beerName("Black Beer").beerStyle("James Joyce").build();
     }
+
+    @Override
+    public BeerDto save(BeerDto beerDto) {
+        return BeerDto.builder().id(UUID.randomUUID()).build();
+    }
 }
