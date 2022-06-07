@@ -1,7 +1,6 @@
 package com.willow.beer_work.services;
 
 import com.willow.beer_work.web.model.BeerDto;
-import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 
