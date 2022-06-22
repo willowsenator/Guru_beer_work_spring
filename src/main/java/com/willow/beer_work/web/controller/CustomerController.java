@@ -20,7 +20,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("{customerId}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<CustomerDto> getCustomer(@PathVariable UUID customerId){
         return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
     }

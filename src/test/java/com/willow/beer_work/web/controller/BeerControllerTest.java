@@ -39,7 +39,7 @@ class BeerControllerTest {
     private ObjectMapper mapper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         validBeer = BeerDto.builder().id(UUID.randomUUID()).beerName("beer1").beerStyle("PAULANER").build();
 
     }
@@ -47,7 +47,8 @@ class BeerControllerTest {
     @Test
     void getBeer() throws Exception {
         given(beerService.getBeerById(validBeer.getId())).willReturn(validBeer);
-        var result = mockMvc.perform(get("/api/v1/beer/" + validBeer.getId().toString()).accept(MediaType.APPLICATION_JSON))
+        var result = mockMvc.perform(get("/api/v1/beer/" + validBeer.getId().toString())
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validBeer.getId().toString())));
@@ -62,8 +63,8 @@ class BeerControllerTest {
         var result = mockMvc.perform(post("/api/v1/beer/")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/v1/beer/" + validBeer.getId().toString()));
+                        .andExpect(status().isCreated())
+                        .andExpect(header().string("Location", "/api/v1/beer/" + validBeer.getId().toString()));
         assertNotNull(result.andReturn().getResponse().containsHeader("Location"));
     }
 
