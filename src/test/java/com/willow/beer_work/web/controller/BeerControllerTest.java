@@ -65,7 +65,7 @@ class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(header().string("Location", "/api/v1/beer/" + validBeer.getId().toString()));
-        assertNotNull(result.andReturn().getResponse().containsHeader("Location"));
+        assertNotNull(result.andReturn().getResponse());
     }
 
 

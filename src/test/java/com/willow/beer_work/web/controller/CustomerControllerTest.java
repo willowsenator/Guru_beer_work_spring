@@ -65,7 +65,7 @@ class CustomerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/v1/customer/" + validCustomer.getId().toString()));
 
-        assertNotNull(result.andReturn().getResponse().containsHeader("Location"));
+        assertNotNull(result.andReturn().getResponse());
     }
 
     @Test
