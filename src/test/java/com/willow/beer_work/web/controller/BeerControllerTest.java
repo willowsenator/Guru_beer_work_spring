@@ -20,9 +20,8 @@ import java.util.UUID;
 
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -69,6 +68,11 @@ class BeerControllerTest {
 
 
     @Test
-    void update() {
+    void update() throws Exception {
+        validBeer.setId(UUID.randomUUID());
+        String json = mapper.writeValueAsString(validBeer);
+        mockMvc.perform(put("/api/v1/beer/" + validBeer.getId().toString())
+                .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }
