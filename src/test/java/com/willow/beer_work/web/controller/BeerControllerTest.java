@@ -79,4 +79,12 @@ class BeerControllerTest {
 
         assertNotNull(result.andReturn().getResponse());
     }
+
+    @Test
+    void deleteById() throws Exception {
+        var result = mockMvc.perform(delete("/api/v1/beer/" + validBeer.getId().toString()))
+                .andExpect(status().isNoContent());
+
+        assertNotNull(result.andReturn().getResponse());
+    }
 }
