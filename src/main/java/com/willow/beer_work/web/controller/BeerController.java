@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-
+@Deprecated
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
@@ -33,7 +33,7 @@ public class BeerController {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity update(@PathVariable UUID beerId, @RequestBody BeerDto beerDto){
+    public ResponseEntity<BeerDto> update(@PathVariable UUID beerId, @RequestBody BeerDto beerDto){
         beerService.update(beerId, beerDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
