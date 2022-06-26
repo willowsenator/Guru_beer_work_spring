@@ -1,6 +1,7 @@
 package com.willow.beer_work.services;
 
 import com.willow.beer_work.web.model.BeerDto;
+import com.willow.beer_work.web.model.BeerStyleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class BeerServiceImpl implements BeerService {
     @Override
     public BeerDto getBeerById(UUID beerId) {
-        return BeerDto.builder().id(UUID.randomUUID()).beerName("Black Beer").beerStyle("James Joyce").build();
+        return BeerDto.builder().id(UUID.randomUUID()).beerName("Black Beer").beerStyle(BeerStyleEnum.ALE).build();
     }
 
     @Override

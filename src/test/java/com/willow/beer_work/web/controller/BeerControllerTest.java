@@ -3,6 +3,7 @@ package com.willow.beer_work.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.willow.beer_work.services.BeerService;
 import com.willow.beer_work.web.model.BeerDto;
+import com.willow.beer_work.web.model.BeerStyleEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,7 @@ class BeerControllerTest {
 
     @BeforeEach
     void setup() {
-        validBeer = BeerDto.builder().id(UUID.randomUUID()).beerName("beer1").beerStyle("PAULANER").build();
+        validBeer = BeerDto.builder().id(UUID.randomUUID()).beerName("beer1").beerStyle(BeerStyleEnum.ALE).build();
 
     }
 
