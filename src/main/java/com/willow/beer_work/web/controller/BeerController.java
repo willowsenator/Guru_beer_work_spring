@@ -5,9 +5,16 @@ import com.willow.beer_work.web.model.BeerDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+@Validated
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
@@ -18,12 +25,12 @@ public class BeerController {
     }
 
     @GetMapping("/{beerId}")
-    public ResponseEntity<BeerDto> getBeer(@PathVariable UUID beerId){
+    public ResponseEntity<BeerDto> getBeer(@NotNull @PathVariable UUID beerId){
         return new ResponseEntity<>(beerService.getBeerById(beerId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<BeerDto> save(@RequestBody BeerDto beerDto){
+    public ResponseEntity<BeerDto> save(@NotNull @Valid @RequestBody BeerDto beerDto){
        BeerDto dto = beerService.save(beerDto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/beer/" + dto.getId().toString());
@@ -32,14 +39,23 @@ public class BeerController {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity<BeerDto> update(@PathVariable UUID beerId, @RequestBody BeerDto beerDto){
+    public ResponseEntity<BeerDto> update(@NotNull @PathVariable UUID beerId, @NotNull @Valid @RequestBody BeerDto beerDto){
         beerService.update(beerId, beerDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{beerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID beerId){
+    public void delete(@NotNull @PathVariable UUID beerId){
         beerService.deleteById(beerId);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List<String>> validateErrorHandler(ConstraintViolationException e){
+        List<String> errors = new ArrayList<>(e.getConstraintViolations().size());
+        e.getConstraintViolations().forEach(constraintViolation -> errors.add(constraintViolation.getPropertyPath()
+                + ": " + constraintViolation.getMessage()));
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }
