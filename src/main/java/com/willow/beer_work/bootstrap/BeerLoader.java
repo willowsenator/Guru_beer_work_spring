@@ -36,7 +36,7 @@ public class BeerLoader implements CommandLineRunner {
                     .beerStyle("PALE_ALE")
                     .quantityToBrew(400)
                     .upc(13432424L)
-                    .price(new BigDecimal("7,6"))
+                    .price(new BigDecimal("7.6"))
                     .minOnHand(10)
                     .build()
             );
