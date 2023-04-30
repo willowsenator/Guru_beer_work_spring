@@ -1,13 +1,21 @@
 package com.willow.beer_work.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Version;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -28,10 +36,10 @@ public class Beer {
 
    @CreationTimestamp
    @Column(updatable = false)
-   private Timestamp createdDate;
+   private OffsetDateTime createdDate;
 
    @UpdateTimestamp
-   private Timestamp lastModifiedDate;
+   private OffsetDateTime lastModifiedDate;
    private String beerName;
    private String beerStyle;
 

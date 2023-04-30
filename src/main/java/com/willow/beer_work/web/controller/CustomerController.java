@@ -2,6 +2,8 @@ package com.willow.beer_work.web.controller;
 
 import com.willow.beer_work.services.CustomerService;
 import com.willow.beer_work.web.model.CustomerDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +22,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+@Slf4j
 @Validated
 @RequestMapping("/api/v1/customer")
 @RestController
+@RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
-
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
 
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerDto> getCustomer(@NotNull @PathVariable UUID customerId){
@@ -38,7 +38,7 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<CustomerDto> save(@NotNull @Valid @RequestBody CustomerDto customer){
         var dto = customerService.save(customer);
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + dto.getId().toString());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
