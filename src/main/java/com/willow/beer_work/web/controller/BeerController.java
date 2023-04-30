@@ -2,6 +2,8 @@ package com.willow.beer_work.web.controller;
 
 import com.willow.beer_work.services.BeerService;
 import com.willow.beer_work.web.model.BeerDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
+@Slf4j
 @Validated
 @RequestMapping("/api/v1/beer")
 @RestController
+@RequiredArgsConstructor
 public class BeerController {
     private final BeerService beerService;
-
-    public BeerController(BeerService beerService) {
-        this.beerService = beerService;
-    }
 
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDto> getBeer(@NotNull @PathVariable UUID beerId){
@@ -36,8 +36,8 @@ public class BeerController {
 
     @PostMapping
     public ResponseEntity<BeerDto> save(@NotNull @Valid @RequestBody BeerDto beerDto){
-       BeerDto dto = beerService.save(beerDto);
-        HttpHeaders headers = new HttpHeaders();
+       var dto = beerService.save(beerDto);
+        var headers = new HttpHeaders();
         headers.add("Location", "/api/v1/beer/" + dto.getId().toString());
 
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
