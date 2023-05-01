@@ -15,7 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -36,10 +36,10 @@ public class Beer {
 
    @CreationTimestamp
    @Column(updatable = false)
-   private OffsetDateTime createdDate;
+   private Timestamp createdDate;
 
    @UpdateTimestamp
-   private OffsetDateTime lastModifiedDate;
+   private Timestamp lastModifiedDate;
    private String beerName;
    private String beerStyle;
 
