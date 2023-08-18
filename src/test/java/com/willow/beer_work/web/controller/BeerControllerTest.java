@@ -21,10 +21,10 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,11 +59,14 @@ class BeerControllerTest {
     @Test
     void getBeer() throws Exception {
         given(beerService.getBeerById(validBeer.getId())).willReturn(validBeer);
-        var result = mockMvc.perform(get("/api/v1/beer/" + validBeer.getId().toString())
+        var result = mockMvc.perform(get("/api/v1/beer/{beerId}", validBeer.getId().toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(validBeer.getId().toString())));
+                .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
+                .andDo(document("v1/beer", pathParameters(
+                        parameterWithName("beerId").description("beer UUID to get")
+                )));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -85,17 +88,23 @@ class BeerControllerTest {
     void update() throws Exception {
         validBeer.setId(UUID.randomUUID());
         String json = mapper.writeValueAsString(validBeer);
-        var result = mockMvc.perform(put("/api/v1/beer/" + validBeer.getId().toString())
+        var result = mockMvc.perform(put("/api/v1/beer/{beerId}", validBeer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("v1/beer", pathParameters(
+                        parameterWithName("beerId").description("beer UUID to get")
+                )));
 
         assertNotNull(result.andReturn().getResponse());
     }
 
     @Test
     void deleteById() throws Exception {
-        var result = mockMvc.perform(delete("/api/v1/beer/" + validBeer.getId().toString()))
-                .andExpect(status().isNoContent());
+        var result = mockMvc.perform(delete("/api/v1/beer/{beerId}", validBeer.getId().toString()))
+                .andExpect(status().isNoContent())
+                .andDo(document("v1/beer", pathParameters(
+                        parameterWithName("beerId").description("beer UUID to get")
+                )));
 
         assertNotNull(result.andReturn().getResponse());
     }
