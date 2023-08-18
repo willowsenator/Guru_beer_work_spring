@@ -20,7 +20,10 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -48,11 +51,14 @@ class CustomerControllerTest {
     void getCustomer() throws Exception {
         given(customerService.getCustomerById(validCustomer.getId())).willReturn(validCustomer);
 
-        var result = mockMvc.perform(get("/api/v1/customer/" + validCustomer.getId().toString())
+        var result = mockMvc.perform(get("/api/v1/customer/{customerId}", validCustomer.getId().toString())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validCustomer.getId().toString())))
-                .andExpect(jsonPath("$.name", is(validCustomer.getName())));
+                .andExpect(jsonPath("$.name", is(validCustomer.getName())))
+                .andDo(document("v1/customer", pathParameters(
+                        parameterWithName("customerId").description("Customer Id to get")
+                )));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -74,9 +80,12 @@ class CustomerControllerTest {
     void update() throws Exception {
         validCustomer.setId(UUID.randomUUID());
         var json = mapper.writeValueAsString(validCustomer);
-        var result = mockMvc.perform(put("/api/v1/customer/" + validCustomer.getId().toString())
+        var result = mockMvc.perform(put("/api/v1/customer/{customerId}", validCustomer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(document("v1/customer", pathParameters(
+                        parameterWithName("customerId").description("Customer Id to get")
+                )));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -84,8 +93,11 @@ class CustomerControllerTest {
     @Test
     void deleteById() throws Exception {
 
-        var result = mockMvc.perform(delete("/api/v1/customer/" + validCustomer.getId().toString()))
-                .andExpect(status().isNoContent());
+        var result = mockMvc.perform(delete("/api/v1/customer/{customerId}", validCustomer.getId().toString()))
+                .andExpect(status().isNoContent())
+                .andDo(document("v1/customer", pathParameters(
+                        parameterWithName("customerId").description("Customer Id to get")
+                )));
         assertNotNull(result.andReturn().getResponse());
     }
 }
