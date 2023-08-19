@@ -22,6 +22,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,9 +58,15 @@ class CustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validCustomer.getId().toString())))
                 .andExpect(jsonPath("$.name", is(validCustomer.getName())))
-                .andDo(document("v1/customer", pathParameters(
-                        parameterWithName("customerId").description("Customer Id to get")
-                )));
+                .andDo(document("v1/customer",
+                        pathParameters(
+                            parameterWithName("customerId").description("Customer Id to get")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("Customer Id"),
+                                fieldWithPath("name").description("Customer name")
+                        )
+                ));
 
         assertNotNull(result.andReturn().getResponse());
     }

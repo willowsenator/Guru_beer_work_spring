@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -64,9 +66,23 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
-                .andDo(document("v1/beer", pathParameters(
-                        parameterWithName("beerId").description("beer UUID to get")
-                )));
+                .andDo(document("v1/beer",
+                        pathParameters(
+                            parameterWithName("beerId").description("beer UUID to get")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("Beer id"),
+                                fieldWithPath("version").description("api version"),
+                                fieldWithPath("beerName").description("Beer name"),
+                                fieldWithPath("createdDate").description("Created Date"),
+                                fieldWithPath("lastModifiedDate").description("last modified date"),
+                                fieldWithPath("beerStyle").description("beer Style"),
+                                fieldWithPath("upc").description("Upc of beer"),
+                                fieldWithPath("price").description("Price"),
+                                fieldWithPath("minOnHand").description("Min beers on hand"),
+                                fieldWithPath("quantityToBrew").description("Quantity to brew")
+                        )
+                ));
 
         assertNotNull(result.andReturn().getResponse());
     }
