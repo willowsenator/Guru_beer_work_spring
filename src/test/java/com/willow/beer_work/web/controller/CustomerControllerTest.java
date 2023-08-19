@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -59,13 +61,8 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.id", is(validCustomer.getId().toString())))
                 .andExpect(jsonPath("$.name", is(validCustomer.getName())))
                 .andDo(document("v1/customer",
-                        pathParameters(
-                            parameterWithName("customerId").description("Customer Id to get")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").description("Customer Id"),
-                                fieldWithPath("name").description("Customer name")
-                        )
+                        getPathParametersSnippet(),
+                        getResponseFieldsSnippet()
                 ));
 
         assertNotNull(result.andReturn().getResponse());
@@ -91,9 +88,7 @@ class CustomerControllerTest {
         var result = mockMvc.perform(put("/api/v1/customer/{customerId}", validCustomer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/customer", pathParameters(
-                        parameterWithName("customerId").description("Customer Id to get")
-                )));
+                .andDo(document("v1/customer", getPathParametersSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -103,9 +98,20 @@ class CustomerControllerTest {
 
         var result = mockMvc.perform(delete("/api/v1/customer/{customerId}", validCustomer.getId().toString()))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/customer", pathParameters(
-                        parameterWithName("customerId").description("Customer Id to get")
-                )));
+                .andDo(document("v1/customer", getPathParametersSnippet()));
         assertNotNull(result.andReturn().getResponse());
+    }
+
+    private static ResponseFieldsSnippet getResponseFieldsSnippet() {
+        return responseFields(
+                fieldWithPath("id").description("Customer Id"),
+                fieldWithPath("name").description("Customer name")
+        );
+    }
+
+    private static PathParametersSnippet getPathParametersSnippet() {
+        return pathParameters(
+                parameterWithName("customerId").description("Customer Id to get")
+        );
     }
 }
