@@ -14,6 +14,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -24,6 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -67,21 +71,8 @@ class BeerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
                 .andDo(document("v1/beer",
-                        pathParameters(
-                            parameterWithName("beerId").description("beer UUID to get")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").description("Beer id"),
-                                fieldWithPath("version").description("api version"),
-                                fieldWithPath("beerName").description("Beer name"),
-                                fieldWithPath("createdDate").description("Created Date"),
-                                fieldWithPath("lastModifiedDate").description("last modified date"),
-                                fieldWithPath("beerStyle").description("beer Style"),
-                                fieldWithPath("upc").description("Upc of beer"),
-                                fieldWithPath("price").description("Price"),
-                                fieldWithPath("minOnHand").description("Min beers on hand"),
-                                fieldWithPath("quantityToBrew").description("Quantity to brew")
-                        )
+                        getPathParametersSnippet(),
+                        getResponseFieldsSnippet()
                 ));
 
         assertNotNull(result.andReturn().getResponse());
@@ -107,9 +98,9 @@ class BeerControllerTest {
         var result = mockMvc.perform(put("/api/v1/beer/{beerId}", validBeer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/beer", pathParameters(
-                        parameterWithName("beerId").description("beer UUID to get")
-                )));
+                .andDo(document("v1/beer",
+                        getPathParametersSnippet(),
+                        getRequestFieldsSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -118,10 +109,43 @@ class BeerControllerTest {
     void deleteById() throws Exception {
         var result = mockMvc.perform(delete("/api/v1/beer/{beerId}", validBeer.getId().toString()))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/beer", pathParameters(
-                        parameterWithName("beerId").description("beer UUID to get")
-                )));
+                .andDo(document("v1/beer", getPathParametersSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
+    }
+
+    private static RequestFieldsSnippet getRequestFieldsSnippet(){
+        return requestFields(
+                fieldWithPath("id").ignored(),
+                fieldWithPath("version").description("api version"),
+                fieldWithPath("beerName").description("Beer name"),
+                fieldWithPath("createdDate").ignored(),
+                fieldWithPath("lastModifiedDate").ignored(),
+                fieldWithPath("beerStyle").description("Beer Style"),
+                fieldWithPath("upc").description("Beer UPC"),
+                fieldWithPath("price").description("Price"),
+                fieldWithPath("minOnHand").description("min beers on hand"),
+                fieldWithPath("quantityToBrew").description("amount of beers to brew")
+        );
+    }
+    private static ResponseFieldsSnippet getResponseFieldsSnippet() {
+        return responseFields(
+                fieldWithPath("id").description("Beer id"),
+                fieldWithPath("version").description("api version"),
+                fieldWithPath("beerName").description("Beer name"),
+                fieldWithPath("createdDate").description("Created Date"),
+                fieldWithPath("lastModifiedDate").description("last modified date"),
+                fieldWithPath("beerStyle").description("beer Style"),
+                fieldWithPath("upc").description("Upc of beer"),
+                fieldWithPath("price").description("Price"),
+                fieldWithPath("minOnHand").description("Min beers on hand"),
+                fieldWithPath("quantityToBrew").description("Quantity to brew")
+        );
+    }
+
+    private static PathParametersSnippet getPathParametersSnippet() {
+        return pathParameters(
+                parameterWithName("beerId").description("beer UUID to get")
+        );
     }
 }
