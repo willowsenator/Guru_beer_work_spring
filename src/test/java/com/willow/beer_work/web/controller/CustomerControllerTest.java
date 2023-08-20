@@ -34,7 +34,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(RestDocumentationExtension.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "willownsenator.dev")
 @WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
