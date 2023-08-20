@@ -32,7 +32,7 @@ public class Beer {
    private UUID id;
 
    @Version
-   private Long version;
+   private long version;
 
    @CreationTimestamp
    @Column(updatable = false)
@@ -47,6 +47,6 @@ public class Beer {
    private Long upc;
    private BigDecimal price;
 
-   private Integer minOnHand;
-   private Integer quantityToBrew;
+   private int minOnHand;
+   private int quantityToBrew;
 }

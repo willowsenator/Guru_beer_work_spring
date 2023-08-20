@@ -2,6 +2,7 @@ package com.willow.beer_work.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.willow.beer_work.services.BeerService;
+import com.willow.beer_work.web.controller.utils.ConstrainedFields;
 import com.willow.beer_work.web.model.BeerDto;
 import com.willow.beer_work.web.model.BeerStyleEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -86,7 +88,10 @@ class BeerControllerTest {
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
-                        .andExpect(header().string("Location", "/api/v1/beer/" + validBeer.getId().toString()));
+                        .andExpect(header().string("Location", "/api/v1/beer/" + validBeer.getId().toString()))
+                .andDo(document("v1/beer",
+                        getRequestFieldsSnippet()
+                ));
         assertNotNull(result.andReturn().getResponse());
     }
 
@@ -115,31 +120,32 @@ class BeerControllerTest {
     }
 
     private static RequestFieldsSnippet getRequestFieldsSnippet(){
+        ConstrainedFields fields = new ConstrainedFields(BeerDto.class);
         return requestFields(
-                fieldWithPath("id").ignored(),
-                fieldWithPath("version").description("api version"),
-                fieldWithPath("beerName").description("Beer name"),
-                fieldWithPath("createdDate").ignored(),
-                fieldWithPath("lastModifiedDate").ignored(),
-                fieldWithPath("beerStyle").description("Beer Style"),
-                fieldWithPath("upc").description("Beer UPC"),
-                fieldWithPath("price").description("Price"),
-                fieldWithPath("minOnHand").description("min beers on hand"),
-                fieldWithPath("quantityToBrew").description("amount of beers to brew")
+                fields.withPath("id").ignored(),
+                fields.withPath("version").description("api version").type("Integer"),
+                fields.withPath("beerName").description("Beer name"),
+                fields.withPath("createdDate").ignored(),
+                fields.withPath("lastModifiedDate").ignored(),
+                fields.withPath("beerStyle").description("Beer Style"),
+                fields.withPath("upc").description("Beer UPC").type("Long"),
+                fields.withPath("price").description("Price").type("BigDecimal"),
+                fields.withPath("minOnHand").description("min beers on hand").type("Integer"),
+                fields.withPath("quantityToBrew").description("amount of beers to brew").type("Integer")
         );
     }
     private static ResponseFieldsSnippet getResponseFieldsSnippet() {
         return responseFields(
-                fieldWithPath("id").description("Beer id"),
-                fieldWithPath("version").description("api version"),
+                fieldWithPath("id").description("Beer id").type("UUID"),
+                fieldWithPath("version").description("api version").type("Integer"),
                 fieldWithPath("beerName").description("Beer name"),
-                fieldWithPath("createdDate").description("Created Date"),
-                fieldWithPath("lastModifiedDate").description("last modified date"),
+                fieldWithPath("createdDate").description("Created Date").type("OffsetDateTime"),
+                fieldWithPath("lastModifiedDate").description("last modified date").type("OffsetDateTime"),
                 fieldWithPath("beerStyle").description("beer Style"),
-                fieldWithPath("upc").description("Upc of beer"),
-                fieldWithPath("price").description("Price"),
-                fieldWithPath("minOnHand").description("Min beers on hand"),
-                fieldWithPath("quantityToBrew").description("Quantity to brew")
+                fieldWithPath("upc").description("Upc of beer").type("Long"),
+                fieldWithPath("price").description("Price").type("BigDecimal"),
+                fieldWithPath("minOnHand").description("Min beers on hand").type("Integer"),
+                fieldWithPath("quantityToBrew").description("Quantity to brew").type("Integer")
         );
     }
 

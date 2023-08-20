@@ -2,6 +2,7 @@ package com.willow.beer_work.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.willow.beer_work.services.CustomerService;
+import com.willow.beer_work.web.controller.utils.ConstrainedFields;
 import com.willow.beer_work.web.model.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -88,7 +91,8 @@ class CustomerControllerTest {
         var result = mockMvc.perform(put("/api/v1/customer/{customerId}", validCustomer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/customer", getPathParametersSnippet()));
+                .andDo(document("v1/customer", getPathParametersSnippet(),
+                        getRequestFieldsSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -104,8 +108,16 @@ class CustomerControllerTest {
 
     private static ResponseFieldsSnippet getResponseFieldsSnippet() {
         return responseFields(
-                fieldWithPath("id").description("Customer Id"),
+                fieldWithPath("id").description("Customer Id").type("UUID"),
                 fieldWithPath("name").description("Customer name")
+        );
+    }
+
+    private static RequestFieldsSnippet getRequestFieldsSnippet(){
+        ConstrainedFields fields = new ConstrainedFields(CustomerDto.class);
+        return requestFields(
+                fields.withPath("id").description("Customer Id").type("UUID"),
+                fields.withPath("name").description("Customer name")
         );
     }
 
