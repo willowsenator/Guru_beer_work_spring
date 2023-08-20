@@ -63,7 +63,7 @@ class CustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validCustomer.getId().toString())))
                 .andExpect(jsonPath("$.name", is(validCustomer.getName())))
-                .andDo(document("v1/customer",
+                .andDo(document("v1/customer_get",
                         getPathParametersSnippet(),
                         getResponseFieldsSnippet()
                 ));
@@ -79,7 +79,9 @@ class CustomerControllerTest {
         var result = mockMvc.perform(post("/api/v1/customer/")
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/v1/customer/" + validCustomer.getId().toString()));
+                .andExpect(header().string("Location", "/api/v1/customer/" + validCustomer.getId().toString()))
+                .andDo(document("v1/customer_new",
+                        getRequestFieldsSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
     }
@@ -91,7 +93,7 @@ class CustomerControllerTest {
         var result = mockMvc.perform(put("/api/v1/customer/{customerId}", validCustomer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/customer", getPathParametersSnippet(),
+                .andDo(document("v1/customer_update", getPathParametersSnippet(),
                         getRequestFieldsSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
@@ -102,7 +104,7 @@ class CustomerControllerTest {
 
         var result = mockMvc.perform(delete("/api/v1/customer/{customerId}", validCustomer.getId().toString()))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/customer", getPathParametersSnippet()));
+                .andDo(document("v1/customer_delete", getPathParametersSnippet()));
         assertNotNull(result.andReturn().getResponse());
     }
 

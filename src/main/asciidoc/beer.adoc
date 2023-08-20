@@ -1,0 +1,68 @@
+=== GET BEER
+
+One showing how to request with curl:
+include::{snippets}/v1/beer_get/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/beer_get/http-request.adoc[]
+
+One for the HTTP response:
+include::{snippets}/v1/beer_get/http-response.adoc[]
+
+Response body:
+include::{snippets}/v1/beer_get/response-body.adoc[]
+
+Path Parameter:
+
+include::{snippets}/v1/beer_get/path-parameters.adoc[]
+
+Response fields:
+include::{snippets}/v1/beer_get/response-fields.adoc[]
+
+=== NEW BEER
+
+One showing how to request with curl:
+include::{snippets}/v1/beer_new/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/beer_new/http-request.adoc[]
+
+One for the HTTP response:
+include::{snippets}/v1/beer_new/http-response.adoc[]
+
+Request fields:
+include::{snippets}/v1/beer_new/request-fields.adoc[]
+
+=== UPDATE BEER
+
+One showing how to request with curl:
+include::{snippets}/v1/beer_update/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/beer_update/http-request.adoc[]
+
+One for the HTTP response:
+include::{snippets}/v1/beer_update/http-response.adoc[]
+
+Path Parameter:
+
+include::{snippets}/v1/beer_update/path-parameters.adoc[]
+
+Request fields:
+include::{snippets}/v1/beer_update/request-fields.adoc[]
+
+=== DELETE BEER
+
+One showing how to request with curl:
+include::{snippets}/v1/beer_delete/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/beer_delete/http-request.adoc[]
+
+
+One for the HTTP response:
+include::{snippets}/v1/beer_delete/http-response.adoc[]
+
+Path Parameter:
+
+include::{snippets}/v1/beer_delete/path-parameters.adoc[]

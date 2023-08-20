@@ -74,7 +74,7 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer_get",
                         getPathParametersSnippet(),
                         getResponseFieldsSnippet()
                 ));
@@ -91,7 +91,7 @@ class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(header().string("Location", "/api/v1/beer/" + validBeer.getId().toString()))
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer_new",
                         getRequestFieldsSnippet()
                 ));
         assertNotNull(result.andReturn().getResponse());
@@ -105,7 +105,7 @@ class BeerControllerTest {
         var result = mockMvc.perform(put("/api/v1/beer/{beerId}", validBeer.getId().toString())
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer_update",
                         getPathParametersSnippet(),
                         getRequestFieldsSnippet()));
 
@@ -116,7 +116,7 @@ class BeerControllerTest {
     void deleteById() throws Exception {
         var result = mockMvc.perform(delete("/api/v1/beer/{beerId}", validBeer.getId().toString()))
                 .andExpect(status().isNoContent())
-                .andDo(document("v1/beer", getPathParametersSnippet()));
+                .andDo(document("v1/beer_delete", getPathParametersSnippet()));
 
         assertNotNull(result.andReturn().getResponse());
     }

@@ -1,0 +1,68 @@
+=== GET CUSTOMER
+
+One showing how to request with curl:
+include::{snippets}/v1/customer_get/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/customer_get/http-request.adoc[]
+
+One for the HTTP response:
+include::{snippets}/v1/customer_get/http-response.adoc[]
+
+Response body:
+include::{snippets}/v1/customer_get/response-body.adoc[]
+
+Path Parameter:
+
+include::{snippets}/v1/customer_get/path-parameters.adoc[]
+
+Response fields:
+include::{snippets}/v1/customer_get/response-fields.adoc[]
+
+=== NEW CUSTOMER
+
+One showing how to request with curl:
+include::{snippets}/v1/customer_new/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/customer_new/http-request.adoc[]
+
+One for the HTTP response:
+include::{snippets}/v1/customer_new/http-response.adoc[]
+
+Request fields:
+include::{snippets}/v1/customer_new/request-fields.adoc[]
+
+=== UPDATE CUSTOMER
+
+One showing how to request with curl:
+include::{snippets}/v1/customer_update/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/customer_update/http-request.adoc[]
+
+One for the HTTP response:
+include::{snippets}/v1/customer_update/http-response.adoc[]
+
+Path Parameter:
+
+include::{snippets}/v1/customer_update/path-parameters.adoc[]
+
+Request fields:
+include::{snippets}/v1/customer_update/request-fields.adoc[]
+
+=== DELETE CUSTOMER
+
+One showing how to request with curl:
+include::{snippets}/v1/customer_delete/curl-request.adoc[]
+
+One showing the HTTP request:
+include::{snippets}/v1/customer_delete/http-request.adoc[]
+
+
+One for the HTTP response:
+include::{snippets}/v1/customer_delete/http-response.adoc[]
+
+Path Parameter:
+
+include::{snippets}/v1/customer_delete/path-parameters.adoc[]
